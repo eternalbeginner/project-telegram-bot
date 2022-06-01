@@ -40,7 +40,7 @@ class Log:
 
       with open(log_path, mode="a") as log_file:
         log_level = level.upper()
-        log_message = message.title()
+        log_message = message.capitalize()
         log_time = datetime.now()
 
         # if the log level is success, then print the log message
