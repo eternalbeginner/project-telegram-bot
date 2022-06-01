@@ -1,6 +1,6 @@
 # dir
 __pycache__/
-log/
+logs/
 venv/
 
 # env
