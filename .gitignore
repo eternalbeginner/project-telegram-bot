@@ -1,6 +1,5 @@
 # dir
 __pycache__/
-logs/
 venv/
 
 # env
@@ -9,3 +8,4 @@ venv/
 
 # misc
 *.session*
+*.log
