@@ -2,6 +2,7 @@ from datetime import datetime
 from os import path
 from app.constants.log import *
 
+
 class Log:
   def debug(self, message: str) -> None:
     return self.write(
