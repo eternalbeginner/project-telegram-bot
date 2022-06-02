@@ -1,8 +1,8 @@
-from pyrogram import client
+from pyrogram.client import Client
 from app.libraries import env, log
 
 class Bot:
-  bot: client.Client
+  bot: Client
 
   def __init__(self):
     log.debug("Initializing application")
@@ -13,7 +13,7 @@ class Bot:
     session_name  = env.get("APP_SESSION_NAME")
     plugins       = { "root": "app/handlers" }
 
-    self.bot = client.Client(
+    self.bot = Client(
       session_name,
       api_id,
       api_hash,

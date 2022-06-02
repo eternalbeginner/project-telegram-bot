@@ -1,4 +1,5 @@
-from pyrogram import client, filters
+from pyrogram import filters
+from pyrogram.client import Client
 from pyrogram.types.messages_and_media import Message
 from app.constants.command import *
 from app.libraries import env, log
@@ -7,10 +8,10 @@ from app.utilities import helper
 data_roles = helper.import_json_data("role")
 
 
-@client.Client.on_message(filters.private & filters.text)
-async def handler(app: client.Client, message: Message):
-  msg_id = message.id
-  msg_sender = message.from_user
+@Client.on_message(filters.private & filters.text)
+async def handler(app: Client, message: Message):
+  msg_id      = message.id
+  msg_sender  = message.from_user
 
   try:
     log.debug("Executing handler for private sended message")
