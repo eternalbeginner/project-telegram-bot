@@ -31,23 +31,6 @@ def import_command_module(name: str):
   ))
 
 
-def import_json_data(name: str):
-  db_name = "data-{}.json".format(name.lower())
-  db_path = path.join("app/databases", db_name)
-
-  try:
-    with open(db_path, mode="r") as db_file:
-      return load(db_file)
-  except BufferError as e:
-    log.error("Buffer exception occured", e)
-    pass
-  except Exception as e:
-    log.error("Exception occured", e)
-    pass
-
-  return {}
-
-
 def is_command_exists(name: str) -> bool:
   return path.isfile(path.join(
     COMMAND_DIR,
