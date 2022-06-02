@@ -37,8 +37,14 @@ class Db:
     if key not in self.current.keys():
       raise Exception("No key named: {} in database: {}".format(key, self.current_name))
 
-    self.current.update({ [key]: value })
-    self._set_db_data(self.current)
+    previous_value = self.current.get(key)
+
+    if isinstance(previous_value, list):
+      previous_value.append(value)
+    elif isinstance(previous_value, dict):
+      previous_value.update(value)
+
+    self._set_db_data()
 
 
   def use(self, name: str):
@@ -71,7 +77,7 @@ class Db:
     return self.current is not None
 
 
-  def _set_db_data(self, data: Any) -> None:
+  def _set_db_data(self) -> None:
     try:
       if not self._is_db_used():
         raise Exception("Currently no DB selected")
@@ -79,7 +85,7 @@ class Db:
       db_path = self._get_db_location(self.current_name)
 
       with open(db_path, mode="w", encoding="utf-8") as db_file:
-        dump(data, db_file, ensure_ascii=False, indent=2)
+        dump(self.current, db_file, ensure_ascii=False, indent=2)
     except BufferError:
       raise Exception("Failed when reading database: {}".format(self.current_name))
 

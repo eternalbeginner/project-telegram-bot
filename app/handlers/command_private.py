@@ -4,11 +4,11 @@ from app.constants.command import *
 from app.libraries import db, env, log
 from app.utilities import helper
 
-db_roles = db.use("roles").get()
-
 
 @client.Client.on_message(filters.private & filters.text)
 async def handler(app: client.Client, message: Message):
+  db_roles = db.use("roles").get()
+
   msg_id = message.id
   msg_sender = message.from_user
 
@@ -74,7 +74,7 @@ async def handler(app: client.Client, message: Message):
 
     log.success("Handler for command: {}'s executed".format(cmd_name))
   except Exception as e:
-    log.error("Exception occured", e)
+    log.error("Handler exception occured", e)
 
     # send information about exception's captured to the admins
     for admin_id in db_roles.get("admin"):
