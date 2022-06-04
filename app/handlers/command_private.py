@@ -16,7 +16,12 @@ async def handler(app: Client, message: Message):
   try:
     log.debug("Executing handler for private sended message")
 
-    cmd, args = helper.get_command_data(message)
+    cmd_data = helper.get_command_data(message)
+
+    if cmd_data is None:
+      return
+
+    cmd, args = cmd_data
     cmd_name  = cmd.replace(env.get("APP_BOT_PREFIX"), "")
 
     # if we can't find the command's handler file, the we
