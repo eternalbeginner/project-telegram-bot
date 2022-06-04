@@ -2,16 +2,16 @@ from pyrogram import filters
 from pyrogram.client import Client
 from pyrogram.types.messages_and_media import Message
 from app.constants.command import *
-from app.libraries import env, log
+from app.libraries import db, env, log
 from app.utilities import helper
-
-data_roles = helper.import_json_data("role")
 
 
 @Client.on_message(filters.private & filters.text)
 async def handler(app: Client, message: Message):
-  msg_id      = message.id
-  msg_sender  = message.from_user
+  db_roles = db.use("roles").get()
+
+  msg_id = message.id
+  msg_sender = message.from_user
 
   try:
     log.debug("Executing handler for private sended message")
@@ -48,7 +48,7 @@ async def handler(app: Client, message: Message):
 
     # check if the command handler hold for some roles restriction, then check
     # if the sender of the message is allowed to use the command
-    if not helper.is_sender_authorized(msg_sender.id, cmd_module.__restriction__, data_roles):
+    if not helper.is_sender_authorized(msg_sender.id, cmd_module.__restriction__, db_roles):
       log.warn("{} try to access authorized command".format(
         msg_sender.username or msg_sender.first_name
       ))
@@ -75,8 +75,8 @@ async def handler(app: Client, message: Message):
 
     log.success("Handler for command: {}'s executed".format(cmd_name))
   except Exception as e:
-    log.error("Exception occured", e)
+    log.error("Handler exception occured", e)
 
     # send information about exception's captured to the admins
-    for admin_id in data_roles.get("admin"):
+    for admin_id in db_roles.get("admin"):
       await app.send_message(admin_id, "Exception occured:\n{}".format(e))
